@@ -2,15 +2,14 @@ package models
 
 import (
 	"time"
-	//"github.com/GDG-KHU-Side/backend-side-project/db"
 )
 
 type User struct {
-	ID        int64
-	Email     string
-	Password  string
-	PhoneNum  string
-	Name      string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        int64     `json:"id"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	PhoneNum  string    `json:"phone_num"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

@@ -2,19 +2,18 @@ package models
 
 import (
 	"time"
-
-	"github.com/GDG-KHU-Side/backend-side-project/db"
 )
 
 type Reservation struct {
-	ID               int64
-	RestID           int64
-	Count            int
-	CustomerPhoneNum string
-	CreatedAt        time.Time
-	IsEntry          int8
+	ID               int64     `json:"id"`
+	RestID           int64     `json:"rest_id"`
+	Count            int       `json:"count"`
+	CustomerPhoneNum string    `json:"customer_phone_num"`
+	CreatedAt        time.Time `json:"created_at"`
+	IsEntry          int8      `json:"is_entry"`
 }
 
+/*
 func (r *Reservation) Create() error {
 	query := `
         INSERT INTO reservation (rest_id, count, customer_phone_num, is_entry)
@@ -33,3 +32,4 @@ func (r *Reservation) Create() error {
 	r.ID = id
 	return nil
 }
+*/
