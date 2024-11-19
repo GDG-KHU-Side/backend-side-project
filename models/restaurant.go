@@ -2,16 +2,15 @@ package models
 
 import (
 	"time"
-	//"github.com/GDG-KHU-Side/backend-side-project/db"
 )
 
 type Restaurant struct {
-	ID          int64
-	Name        string
-	Address     string
-	Description string
-	PhoneNum    string
-	WaitingTime int
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	ID          int64     `json:"id"`
+	Name        string    `json:"name"`
+	Address     string    `json:"address"`
+	Description string    `json:"description"`
+	PhoneNum    string    `json:"phone_num"`
+	WaitingTime int       `json:"waiting_time"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }

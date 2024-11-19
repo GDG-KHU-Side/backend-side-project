@@ -2,11 +2,10 @@ package models
 
 import (
 	"time"
-	//"github.com/GDG-KHU-Side/backend-side-project/db"
 )
 
 type UserRest struct {
-	UserID    int64
-	RestID    int64
-	CreatedAt time.Time
+	UserID    int64     `json:"user_id"`
+	RestID    int64     `json:"rest_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
