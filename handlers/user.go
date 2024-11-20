@@ -35,7 +35,13 @@ func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Email and Password are required", http.StatusBadRequest)
 		return
 	}
-	log.Println(loginData)
+
+	logData, err := json.MarshalIndent(loginData, "", "  ") // JSON 변환
+	if err != nil {
+		log.Fatalf("Failed to marshal loginData: %v", err)
+	}
+	log.Println("Decoded loginData:", string(logData))
+
 	user, err := h.service.LoginUser(&loginData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -47,6 +53,7 @@ func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	log.Println("Success")
 }
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {

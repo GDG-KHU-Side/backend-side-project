@@ -28,8 +28,11 @@ func (s *UserService) LoginUser(l *models.LoginData) (*models.User, error) {
 	var user models.User
 	var password string
 	err := db.DB.QueryRow(`
-        SELECT id, email, password, phone_num, name, created_at, updated_at
-        FROM users WHERE email = ?`, l.Email).Scan(
+         SELECT u.*, ur.rest_id
+        FROM users u
+        LEFT JOIN gdgdb.user_rest ur on u.id = ur.user_id
+        WHERE email = ?
+		`, l.Email).Scan(
 		&user.ID,
 		&user.Email,
 		&password,
@@ -37,9 +40,10 @@ func (s *UserService) LoginUser(l *models.LoginData) (*models.User, error) {
 		&user.Name,
 		&user.CreatedAt,
 		&user.UpdatedAt,
+		&user.RestID,
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("존재하지 않는 회원입니다.")
 	}
 	// 비밀번호 검증
 	if !CheckPasswordHash(l.Password, password) {
