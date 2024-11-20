@@ -29,12 +29,17 @@ func main() {
 	userService := &services.UserService{}
 	userHandler := handlers.NewUserHandler(userService)
 
+	reservationService := &services.ReservationService{}
+	reservationHandler := handlers.NewReservationHandler(reservationService)
+
 	//page
 	r.HandleFunc("/", handlers.IndexHandler)
 	r.HandleFunc("/restaurant-list", handlers.RestaurantListHandler)
 	r.HandleFunc("/restaurant/{id:[0-9]+}", handlers.RestaurantDetailHandler)
 
 	r.HandleFunc("/login", handlers.UserLoginHandler)
+
+	r.HandleFunc("/reservation-list/{id:[0-9]+}", handlers.ReservationListHandler)
 
 	//api
 	r.HandleFunc("/api/restaurant-list", restaurantHandler.GetRestaurantList).Methods("GET")
@@ -47,6 +52,8 @@ func main() {
 	r.HandleFunc("/api/user/{id}", userHandler.GetUser).Methods("GET")
 	r.HandleFunc("/api/user", userHandler.UpdateUser).Methods("PUT")
 	r.HandleFunc("/api/user/{id}", userHandler.DeleteUser).Methods("DELETE")
+
+	r.HandleFunc("/api/user/reservation-list/{id}", reservationHandler.GetReservationList).Methods("GET")
 
 	r.HandleFunc("/api/link", userHandler.LinkRestaurant).Methods("POST")
 
