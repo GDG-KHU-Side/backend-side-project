@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package proto;
+
+
+option go_package = ".";
+
+// UserService: 회원 관리 서비스 정의
+service UserService {
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse); // 회원 로그인
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse); // 회원 생성
+  rpc GetUser(GetUserRequest) returns (GetUserResponse); // 회원 조회
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse); // 회원 업데이트
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse); // 회원 삭제
+  rpc LinkUserRest(LinkUserRestRequest) returns (LinkUserRestResponse); // 회원-레스토랑 연결
+}
+
+// 회원 로그인 요청 메시지
+message LoginUserRequest {
+  string email = 1; // 이메일
+  string password = 2; // 비밀번호
+}
+
+// 회원 로그인 응답 메시지
+message LoginUserResponse {
+  int64 id = 1; // 사용자 ID
+  int64 rest_id = 2; // 레스토랑 ID
+  string email = 3; // 이메일
+  string phone_num = 4; // 전화번호
+  string name = 5; // 이름
+  string created_at = 6; // 생성 날짜
+  string updated_at = 7; // 수정 날짜
+}
+
+// 회원 생성 요청 메시지
+message CreateUserRequest {
+  string email = 1; // 이메일
+  string password = 2; // 비밀번호
+  string phone_num = 3; // 전화번호
+  string name = 4; // 이름
+}
+
+// 회원 생성 응답 메시지
+message CreateUserResponse {
+  int64 id = 1; // 사용자 ID
+  string email = 2; // 이메일
+  string phone_num = 3; // 전화번호
+  string name = 4; // 이름
+  string created_at = 5; // 생성 날짜
+  string updated_at = 6; // 수정 날짜
+}
+
+// 회원 조회 요청 메시지
+message GetUserRequest {
+  int64 id = 1; // 사용자 ID
+}
+
+// 회원 조회 응답 메시지
+message GetUserResponse {
+  int64 id = 1; // 사용자 ID
+  string email = 2; // 이메일
+  string phone_num = 3; // 전화번호
+  string name = 4; // 이름
+  string created_at = 5; // 생성 날짜
+  string updated_at = 6; // 수정 날짜
+}
+
+// 회원 업데이트 요청 메시지
+message UpdateUserRequest {
+  int64 id = 1; // 사용자 ID
+  string email = 2; // 이메일
+  string phone_num = 3; // 전화번호
+  string name = 4; // 이름
+}
+
+// 회원 업데이트 응답 메시지
+message UpdateUserResponse {
+  bool success = 1; // 성공 여부
+}
+
+// 회원 삭제 요청 메시지
+message DeleteUserRequest {
+  int64 id = 1; // 사용자 ID
+}
+
+// 회원 삭제 응답 메시지
+message DeleteUserResponse {
+  bool success = 1; // 성공 여부
+}
+
+// 회원-레스토랑 연결 요청 메시지
+message LinkUserRestRequest {
+  int64 user_id = 1; // 사용자 ID
+  int64 rest_id = 2; // 레스토랑 ID
+}
+
+// 회원-레스토랑 연결 응답 메시지
+message LinkUserRestResponse {
+  bool success = 1; // 성공 여부
+}

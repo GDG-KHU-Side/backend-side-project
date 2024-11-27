@@ -6,7 +6,34 @@ import (
 	"github.com/GDG-KHU-Side/backend-side-project/db"
 	"github.com/GDG-KHU-Side/backend-side-project/models"
 	"golang.org/x/crypto/bcrypt"
+
+	pb "github.com/GDG-KHU-Side/backend-side-project/proto"
 )
+
+// gRPC 관련 코드
+// UserServiceServer 구현
+type server struct {
+	pb.UnimplementedUserServiceServer
+}
+
+func (s *server) GetUser(id int64) (*models.User, error) {
+	var user models.User
+	err := db.DB.QueryRow("SELECT id, email, name, phone_num,created_at, updated_at FROM users WHERE id = ?", id).
+		Scan(
+			&user.ID,
+			&user.Email,
+			&user.Name,
+			&user.PhoneNum,
+			&user.CreatedAt,
+			&user.UpdatedAt,
+		)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+// 끝
 
 type UserService struct{}
 
