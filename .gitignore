@@ -1,1 +1,8 @@
 .env
+
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+*.exe
+main.tf

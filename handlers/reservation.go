@@ -24,6 +24,11 @@ func ReservationListHandler(w http.ResponseWriter, r *http.Request) {
 func (h *ReservationHandler) GetReservationList(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid restaurant ID", http.StatusBadRequest)
+		return
+	}
+
 	reservations, err := h.service.GetAllRestaurants(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -31,7 +36,6 @@ func (h *ReservationHandler) GetReservationList(w http.ResponseWriter, r *http.R
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(reservations); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

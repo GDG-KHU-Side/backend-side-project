@@ -1,0 +1,27 @@
+syntax = "proto3";
+package reservation;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/GDG-KHU-Side/backend-side-project/proto";
+
+service ReservationService {
+  rpc GetRestaurantReservations (GetReservationsRequest) returns (GetReservationsResponse);
+}
+
+message Reservation {
+  int64 id = 1;
+  int64 rest_id = 2;
+  int32 count = 3;
+  string customer_phone_num = 4;
+  google.protobuf.Timestamp created_at = 5;
+  int32 is_entry = 6;
+}
+
+message GetReservationsRequest {
+  int64 restaurant_id = 1;
+}
+
+message GetReservationsResponse {
+  repeated Reservation reservations = 1;
+}
