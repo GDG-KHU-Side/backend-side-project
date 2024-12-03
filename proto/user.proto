@@ -7,12 +7,12 @@ option go_package = ".";
 
 // UserService: 회원 관리 서비스 정의
 service UserService {
-  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse); // 회원 로그인
-  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse); // 회원 생성
-  rpc GetUser(GetUserRequest) returns (GetUserResponse); // 회원 조회
-  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse); // 회원 업데이트
-  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse); // 회원 삭제
-  rpc LinkUserRest(LinkUserRestRequest) returns (LinkUserRestResponse); // 회원-레스토랑 연결
+  rpc gLoginUser(LoginUserRequest) returns (LoginUserResponse); // 회원 로그인
+  rpc gCreateUser(CreateUserRequest) returns (CreateUserResponse); // 회원 생성
+  rpc gGetUser(GetUserRequest) returns (GetUserResponse); // 회원 조회
+  rpc gUpdateUser(UpdateUserRequest) returns (UpdateUserResponse); // 회원 업데이트
+  rpc gDeleteUser(DeleteUserRequest) returns (DeleteUserResponse); // 회원 삭제
+  rpc gLinkUserRest(LinkUserRestRequest) returns (LinkUserRestResponse); // 회원-레스토랑 연결
 }
 
 // 회원 로그인 요청 메시지

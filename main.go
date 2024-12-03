@@ -2,13 +2,16 @@ package main
 
 import (
 	"log"
+	"net"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"google.golang.org/grpc"
 
 	"github.com/GDG-KHU-Side/backend-side-project/config"
 	"github.com/GDG-KHU-Side/backend-side-project/db"
 	"github.com/GDG-KHU-Side/backend-side-project/handlers"
+	pb "github.com/GDG-KHU-Side/backend-side-project/proto"
 	"github.com/GDG-KHU-Side/backend-side-project/services"
 )
 
@@ -20,6 +23,19 @@ func main() {
 		log.Fatal("Failed to initialize database:", err)
 	}
 	defer db.DB.Close()
+
+	//gRPC
+	lis, err := net.Listen("tcp", ":8088")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	grpcConn := grpc.NewServer()
+	pb.UserServiceServer(grpcConn, &services.server{})
+	if err = grpcConn.Serve(lis); err != nil {
+		log.Fatalf("Failed to connect gRPC server: %v", err)
+	}
+
+	//end gRPC
 
 	r := mux.NewRouter()
 

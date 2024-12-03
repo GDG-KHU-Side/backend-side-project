@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/GDG-KHU-Side/backend-side-project/db"
@@ -16,20 +17,32 @@ type server struct {
 	pb.UnimplementedUserServiceServer
 }
 
-func (s *server) GetUser(id int64) (*models.User, error) {
-	var user models.User
-	err := db.DB.QueryRow("SELECT id, email, name, phone_num,created_at, updated_at FROM users WHERE id = ?", id).
-		Scan(
-			&user.ID,
-			&user.Email,
-			&user.Name,
-			&user.PhoneNum,
-			&user.CreatedAt,
-			&user.UpdatedAt,
-		)
+func (s *server) gLoginUser(ctx context.Context, l *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
+	var user pb.LoginUserResponse
+	var password string
+	err := db.DB.QueryRow(`
+         SELECT u.*, ur.rest_id
+        FROM users u
+        LEFT JOIN gdgdb.user_rest ur on u.id = ur.user_id
+        WHERE email = ?
+		`, l.Email).Scan(
+		&user.Id,
+		&user.Email,
+		&password,
+		&user.PhoneNum,
+		&user.Name,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+		&user.RestId,
+	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("존재하지 않는 회원입니다.")
 	}
+	// 비밀번호 검증
+	if !CheckPasswordHash(l.Password, password) {
+		return nil, fmt.Errorf("invalid password")
+	}
+
 	return &user, nil
 }
 

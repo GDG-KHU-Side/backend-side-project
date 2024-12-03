@@ -1,14 +1,18 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/GDG-KHU-Side/backend-side-project/models"
+	pb "github.com/GDG-KHU-Side/backend-side-project/proto"
 	"github.com/GDG-KHU-Side/backend-side-project/services"
 	"github.com/gorilla/mux"
+	"google.golang.org/grpc"
 )
 
 type UserHandler struct {
@@ -24,6 +28,9 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
+
+	log.Printf("Config: %v", r)
+
 	var loginData models.LoginData
 
 	if err := json.NewDecoder(r.Body).Decode(&loginData); err != nil {
@@ -169,4 +176,31 @@ func (h *UserHandler) LinkRestaurant(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *services.server) LoginUser(email, password string) (*pb.LoginUserResponse, error) {
+	// gRPC 서버 연결
+	conn, err := grpc.NewClient("localhost:8088", grpc.WithInsecure())
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	// UserService 클라이언트 생성
+	client := pb.NewUserServiceClient(conn)
+
+	// 컨텍스트 설정 (타임아웃 포함)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	// Login 요청
+	response, err := client.GLoginUser(ctx, &pb.LoginUserRequest{
+		Email:    email,
+		Password: password,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
